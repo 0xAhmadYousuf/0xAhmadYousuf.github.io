@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Obfuscator with Config Controller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .config-section {
+            margin-bottom: 20px;
+        }
+        .config-section label {
+            font-weight: bold;
+        }
+        .config-section input, .config-section select {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+        }
+        .config-item {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Obfuscator with Config Controller</h1>
+        <p>Paste your JavaScript code below, adjust settings, and click "Obfuscate" to protect it.</p>
+        <textarea id="inputCode" placeholder="Paste your JavaScript code here..."></textarea>
+
+        <div class="config-section">
+            <h2>Obfuscation Settings</h2>
+            <div class="config-item">
+                <label for="compact">Compact Output:</label>
+                <input type="checkbox" id="compact" checked>
+            </div>
+            <div class="config-item">
+                <label for="controlFlowFlattening">Enable Control Flow Flattening:</label>
+                <input type="checkbox" id="controlFlowFlattening" checked>
+            </div>
+            <div class="config-item">
+                <label for="controlFlowFlatteningThreshold">Control Flow Flattening Threshold:</label>
+                <input type="number" id="controlFlowFlatteningThreshold" min="0" max="1" step="0.01" value="0.75">
+            </div>
+            <div class="config-item">
+                <label for="deadCodeInjection">Enable Dead Code Injection:</label>
+                <input type="checkbox" id="deadCodeInjection" checked>
+            </div>
+            <div class="config-item">
+                <label for="deadCodeInjectionThreshold">Dead Code Injection Threshold:</label>
+                <input type="number" id="deadCodeInjectionThreshold" min="0" max="1" step="0.01" value="0.4">
+            </div>
+            <div class="config-item">
+                <label for="debugProtection">Enable Debug Protection:</label>
+                <input type="checkbox" id="debugProtection" checked>
+            </div>
+            <div class="config-item">
+                <label for="debugProtectionInterval">Debug Protection Interval:</label>
+                <input type="number" id="debugProtectionInterval" min="0" step="1" value="0">
+            </div>
+            <div class="config-item">
+                <label for="stringArray">Enable String Array:</label>
+                <input type="checkbox" id="stringArray" checked>
+            </div>
+            <div class="config-item">
+                <label for="stringArrayThreshold">String Array Threshold:</label>
+                <input type="number" id="stringArrayThreshold" min="0" max="1" step="0.01" value="0.75">
+            </div>
+            <div class="config-item">
+                <label for="stringArrayEncoding">String Array Encoding:</label>
+                <select id="stringArrayEncoding">
+                    <option value="">None</option>
+                    <option value="base64">Base64</option>
+                    <option value="rc4">RC4</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="handleObfuscateButtonClick()">Obfuscate</button>
+        
+        <h2>Obfuscated Code:</h2>
+        <pre id="outputCode">Your obfuscated code will appear here...</pre>
+    </div>
+
+    <!-- Include JavaScript Obfuscator Library -->
+    <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
+    <script>
+        function obfuscateCode(inputCode, obfuscationOptions) {
+            if (!inputCode.trim()) {
+                alert("Please enter some JavaScript code to obfuscate!");
+                return;
+            }
+    
+            try {
+                // Obfuscate code
+                const obfuscatedCode = JavaScriptObfuscator.obfuscate(inputCode, obfuscationOptions).getObfuscatedCode();
+    
+                // Display the obfuscated code
+                document.getElementById("outputCode").textContent = obfuscatedCode;
+            } catch (error) {
+                alert("An error occurred while obfuscating the code: " + error.message);
+            }
+        }
+    
+        function handleObfuscateButtonClick() {
+            const inputCode = document.getElementById("inputCode").value;
+    
+            const obfuscationOptions = {
+                compact: document.getElementById("compact").checked,
+                controlFlowFlattening: document.getElementById("controlFlowFlattening").checked,
+                controlFlowFlatteningThreshold: parseFloat(document.getElementById("controlFlowFlatteningThreshold").value),
+                deadCodeInjection: document.getElementById("deadCodeInjection").checked,
+                deadCodeInjectionThreshold: parseFloat(document.getElementById("deadCodeInjectionThreshold").value),
+                debugProtection: document.getElementById("debugProtection").checked,
+                debugProtectionInterval: parseInt(document.getElementById("debugProtectionInterval").value, 10),
+                stringArray: document.getElementById("stringArray").checked,
+                stringArrayThreshold: parseFloat(document.getElementById("stringArrayThreshold").value),
+                stringArrayEncoding: document.getElementById("stringArrayEncoding").value ? [document.getElementById("stringArrayEncoding").value] : []
+            };
+    
+            obfuscateCode(inputCode, obfuscationOptions);
+        }
+    </script>
+    
+</body>
+</html>
